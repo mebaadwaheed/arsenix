@@ -64,3 +64,71 @@ Generates a personalized feed for a user based on their interests.
 - **server** (`ArsenixServer`): The Arsenix server instance.
 - **user_id** (`str`): The ID of the user.
 
+## ArsenixServer
+
+The `ArsenixServer` is the main entry point for interacting with the library. It manages the data store, caching, and other core components.
+
+### `__init__(self, data_store=None)`
+- **data_store** (`dict`, optional): An initial data store. Defaults to an empty dictionary.
+
+### `async get(self, key, default=None)`
+Retrieves a value from the data store.
+
+### `async set(self, key, value)`
+Sets a value in the data store.
+
+### `async load_from_file(self, filepath)`
+Loads the data store from a JSON or YAML file.
+
+### `async sync(self, action, filepath='arsenix_store.json')`
+Saves or loads the data store to/from a file.
+
+### `use_cache(self, provider, **kwargs)`
+Switches the caching engine dynamically. Supported providers: `'diskcache'`, `'redis'`.
+
+### `async get_recommendations(self, user_id, top_n=3, limit=10)`
+Generates personalized recommendations for a user.
+
+## ARGetter & ARSetter
+
+These are the underlying asynchronous handlers for getting and setting data in the data store.
+
+### `ARGetter.get(self, key, default=None)`
+
+### `ARSetter.set(self, key, value)`
+
+## Caching
+
+Arsenix supports pluggable caching to improve performance.
+
+### `LocalCache`
+An in-memory cache.
+- `async get(self, key, default=None)`
+- `async put(self, key, value)`
+- `async delete(self, key)`
+- `async clear(self)`
+
+### `DiskCache`
+A file-based cache using the `diskcache` library.
+- `__init__(self, directory='cache')`
+- `async get(self, key, default=None)`
+- `async put(self, key, value)`
+- `async delete(self, key)`
+- `async clear(self)`
+
+### `RedisCache`
+A cache that connects to a Redis server.
+- `__init__(self, url='redis://localhost:6379')`
+- `async get(self, key, default=None)`
+- `async put(self, key, value)`
+- `async delete(self, key)`
+- `async clear(self)`
+
+## Pattern Learning
+
+Arsenix can learn patterns from user data.
+
+### `Pattern`
+- `async learn(self, user_id, interests)`
+- `async get_pattern(self, user_id)`
+- `async get_all_patterns(self)`

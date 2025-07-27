@@ -29,7 +29,7 @@ await server.load_from_file('your_data.json')
 The `FYPBuilder` provides a declarative, chainable interface for building sophisticated recommendation algorithms using a rule-and-score engine.
 
 ```python
-from arsenix import FYPBuilder
+from arsenix.algorithm import FYPBuilder
 
 # Get items from the server
 items = await server.get('items', {})
@@ -54,7 +54,7 @@ Arsenix also provides pre-built strategies for common use cases, allowing you to
 Generate a trending feed based on engagement and recency.
 
 ```python
-from arsenix import TrendingFYP
+from arsenix.presets import TrendingFYP
 
 trending_feed = await TrendingFYP(server)
 print(trending_feed)
@@ -65,7 +65,7 @@ print(trending_feed)
 Generate a personalized feed for a specific user based on their interests.
 
 ```python
-from arsenix import PersonalizedFYP
+from arsenix.presets import PersonalizedFYP
 
 personalized_feed = await PersonalizedFYP(server, user_id='user_123')
 print(personalized_feed)

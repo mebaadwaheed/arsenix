@@ -76,3 +76,50 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+## Example 4: Using Pluggable Caching
+
+This example demonstrates how to switch the caching engine to `DiskCache` for persistent caching.
+
+```python
+import asyncio
+from arsenix import ArsenixServer
+
+async def main():
+    # Initialize the server
+    server = ArsenixServer()
+
+    # Switch to DiskCache
+    server.use_cache('diskcache', directory='my_app_cache')
+
+    # Use the cache
+    await server.cache.put('user_session', {'id': 'user1', 'status': 'active'})
+    session = await server.cache.get('user_session')
+    print("Cached Session:", session)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## Example 5: Learning User Patterns
+
+This example shows how to learn a user's interests from their interactions and then retrieve the learned pattern.
+
+```python
+import asyncio
+from arsenix import ArsenixServer
+
+async def main():
+    # Initialize the server
+    server = ArsenixServer()
+
+    # Learn a user's interests
+    await server.pattern.learn('user1', ['tech', 'python', 'ai'])
+    await server.pattern.learn('user1', ['tech', 'async'])
+
+    # Get the user's learned pattern
+    user_pattern = await server.pattern.get_pattern('user1')
+    print("Learned Pattern for user1:", user_pattern)
+
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -9,7 +9,8 @@ Get started in minutes with our pre-built FYP strategies.
 ### Trending Feed
 
 ```python
-from arsenix import ArsenixServer, TrendingFYP
+from arsenix import ArsenixServer
+from arsenix.presets import TrendingFYP
 
 server = ArsenixServer()
 await server.load_from_file('data.json')
@@ -21,7 +22,8 @@ print(trending_feed)
 ### Personalized Feed
 
 ```python
-from arsenix import ArsenixServer, PersonalizedFYP
+from arsenix import ArsenixServer
+from arsenix.presets import PersonalizedFYP
 
 server = ArsenixServer()
 await server.load_from_file('data.json')
@@ -35,7 +37,7 @@ print(personalized_feed)
 For more advanced use cases, the `FYPBuilder` provides a flexible, chainable interface for creating custom recommendation algorithms.
 
 ```python
-from arsenix import FYPBuilder
+from arsenix.algorithm import FYPBuilder
 
 items = await server.get('items', {})
 

@@ -1,9 +1,9 @@
-# ArsenixPY: The Async-First Personalization Toolkit
+# Arsenix: The Async-First Personalization Toolkit
 
-[![PyPI version](https://badge.fury.io/py/arsenixpy.svg)](https://badge.fury.io/py/arsenixpy)
+[![PyPI version](https://badge.fury.io/py/arsenixpy.svg)](https://pypi.org/project/arsenix/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-ArsenixPY is a modern, lightweight, and async-first Python library designed for building sophisticated personalization and recommendation systems with ease. It provides a flexible and modular toolkit for tracking user behavior, managing data, and generating real-time recommendations.
+Arsenix is a modern, lightweight, and async-first Python library designed for building sophisticated personalization and recommendation systems with ease. It provides a flexible and modular toolkit for tracking user behavior, managing data, and generating real-time recommendations.
 
 ## Why Arsenix?
 

@@ -1,45 +1,66 @@
 # API Reference
 
-This document provides a detailed overview of the public API for the Arsenix library. All core components are designed to be asynchronous.
+This document provides a detailed reference for the core components of the Arsenix library, including the `FYPBuilder` and the pre-built FYP strategies.
 
-## `ArsenixServer`
+## FYPBuilder
 
-The `ArsenixServer` is the main entry point for interacting with the library.
+The `FYPBuilder` is a declarative interface for creating custom recommendation algorithms. You can chain together various methods to build a sophisticated scoring and ranking engine.
 
-- `__init__(self, data_store=None)`: Initializes the server. If `data_store` is not provided, an empty dictionary is created.
-- `async get(self, key, default=None)`: Retrieves a value from the data store.
-- `async set(self, key, value)`: Sets a key-value pair in the data store.
-- `async load_from_file(self, filepath)`: Loads data from a JSON or YAML file into the data store.
-- `use_cache(self, provider, **kwargs)`: Switches the caching engine. 
-- `async sync(self, action, filepath='arsenix_store.json')`: Saves or loads the data store to/from a file.
-- `async get_recommendations(self, user_id, top_n=3, limit=10)`: Generates personalized recommendations for a user.
+### `__init__(self, items)`
+Initializes the builder with a set of items to process.
 
-## `ARGetter`
+- **items** (`dict`): A dictionary of items to be processed.
 
-- `async get(self, key, default=None)`: Retrieves a value by key from the associated data store.
+### `match_tags(self, tags, weight=1.0)`
+Adds a rule to boost items that match a set of tags. The score is increased by the `weight` multiplied by the number of matching tags.
 
-## `ARSetter`
+- **tags** (`list`): A list of tags to match.
+- **weight** (`float`, optional): The weight to apply for each matching tag. Defaults to `1.0`.
 
-- `async set(self, key, value)`: Sets or updates a key-value pair.
-- `async update(self, key, new_value)`: Updates an existing entry.
-- `async delete(self, key)`: Deletes an entry by key.
-- `async bulk_set(self, data)`: Adds multiple entries from a dictionary.
-- `async load_from_file(self, filepath)`: Loads data from a JSON or YAML file.
+### `boost_by_key(self, key, factor)`
+Adds a rule to boost items based on a numerical key. The score is multiplied by `(1 + log(1 + value) * factor)`.
 
-## `LocalCache`
+- **key** (`str`): The dictionary key to use for boosting.
+- **factor** (`float`): The factor to apply to the boost.
 
-- `async get(self, key, default=None)`: Retrieves an item from the cache.
-- `async put(self, key, value)`: Adds an item to the cache.
-- `async delete(self, key)`: Removes an item from the cache.
-- `async clear(self)`: Clears the entire cache.
+### `demote_by_key(self, key, factor)`
+Adds a rule to demote items based on a numerical key. The score is divided by `(1 + log(1 + value) * factor)`.
 
-## `FYPBuilder`
+- **key** (`str`): The dictionary key to use for demoting.
+- **factor** (`float`): The factor to apply to the demotion.
 
-- `async FYPBuilder(items)`: Sorts a list of dictionary items based on their `score` in descending order.
+### `boost_recency(self, factor, time_key='timestamp')`
+Adds a rule to boost items based on their recency. The score is multiplied by a recency score calculated from the item's age.
 
-## `Pattern`
+- **factor** (`float`): The factor to apply to the recency score.
+- **time_key** (`str`, optional): The key containing the item's timestamp. Defaults to `'timestamp'`.
 
-- `async learn(self, user_id, interests)`: Learns and updates the interest pattern for a user.
-- `async get_pattern(self, user_id)`: Retrieves the learned interest pattern for a user.
-- `async auto_learn(self, user_id, tags)`: An alias for the `learn` method to track user behavior automatically.
-- `async get_all_patterns(self)`: Returns all learned user patterns.
+### `sort_by(self, key, reverse=True)`
+Adds a final sorting step that overrides the default score-based sort.
+
+- **key** (`str`): The dictionary key to sort by.
+- **reverse** (`bool`, optional): Whether to sort in descending order. Defaults to `True`.
+
+### `limit(self, count)`
+Limits the number of items returned.
+
+- **count** (`int`): The maximum number of items to return.
+
+### `run(self)`
+Executes the configured algorithm and returns the processed items.
+
+## Pre-Built FYP Strategies
+
+Arsenix provides pre-built functions for common recommendation scenarios.
+
+### `TrendingFYP(server)`
+Generates a trending feed by boosting items with high engagement and recent activity.
+
+- **server** (`ArsenixServer`): The Arsenix server instance.
+
+### `PersonalizedFYP(server, user_id)`
+Generates a personalized feed for a user based on their interests.
+
+- **server** (`ArsenixServer`): The Arsenix server instance.
+- **user_id** (`str`): The ID of the user.
+

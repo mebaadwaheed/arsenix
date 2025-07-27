@@ -1,5 +1,5 @@
 from .server import ArsenixServer
-from .cache import LocalCache
+from .cache import LocalCache, DiskCache, RedisCache
 from .pattern import Pattern
 
 __all__ = [

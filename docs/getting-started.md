@@ -1,54 +1,72 @@
 # Getting Started with Arsenix
 
-This guide will walk you through the process of installing Arsenix and running your first asynchronous application.
+Welcome to Arsenix, a powerful and flexible library for building recommendation engines. This guide will walk you through the basics of setting up the server, using the `FYPBuilder` to create custom algorithms, and leveraging pre-built strategies for common use cases.
 
 ## Installation
 
-Arsenix is available on PyPI and can be installed using pip. To install the library, run the following command in your terminal:
+To get started, install Arsenix using pip:
 
 ```bash
 pip install arsenix
 ```
 
-This will install Arsenix along with its required dependencies, `PyYAML` and `aiofiles`.
+## Initializing the Server
 
-## Your First Arsenix Application
-
-Let's create a simple example to see Arsenix in action. The following script initializes the `ArsenixServer`, adds a piece of data, and retrieves it.
-
-Create a file named `main.py` and add the following code:
+The `ArsenixServer` is the central component of the library. It manages your data and provides the interface for all other features.
 
 ```python
-import asyncio
 from arsenix import ArsenixServer
 
-async def main():
-    # Initialize the server
-    server = ArsenixServer()
+# Initialize the server
+server = ArsenixServer()
 
-    # Set a key-value pair
-    await server.set("message", "Hello, Arsenix!")
-
-    # Get the value
-    message = await server.get("message")
-    print(message)
-
-if __name__ == "__main__":
-    asyncio.run(main())
+# Load data from a file (optional)
+await server.load_from_file('your_data.json')
 ```
 
-### Running the Example
+## Building a Custom Feed with FYPBuilder
 
-To run the script, execute the following command in your terminal:
+The `FYPBuilder` provides a declarative, chainable interface for building sophisticated recommendation algorithms using a rule-and-score engine.
 
-```bash
-python main.py
+```python
+from arsenix import FYPBuilder
+
+# Get items from the server
+items = await server.get('items', {})
+
+# Build a custom algorithm
+builder = FYPBuilder(items)
+recommendations = await builder.match_tags(['tech', 'ai'], weight=2.0) \
+                               .boost_recency(1.5) \
+                               .boost_by_key('likes', 0.1) \
+                               .limit(10) \
+                               .run()
+
+print(recommendations)
 ```
 
-You should see the following output:
+## Using Pre-Built FYP Strategies
 
-```
-Hello, Arsenix!
+Arsenix also provides pre-built strategies for common use cases, allowing you to get up and running quickly.
+
+### Trending Feed
+
+Generate a trending feed based on engagement and recency.
+
+```python
+from arsenix import TrendingFYP
+
+trending_feed = await TrendingFYP(server)
+print(trending_feed)
 ```
 
-Congratulations! You've successfully built and run your first application with Arsenix. Now you're ready to explore its more advanced features.
+### Personalized Feed
+
+Generate a personalized feed for a specific user based on their interests.
+
+```python
+from arsenix import PersonalizedFYP
+
+personalized_feed = await PersonalizedFYP(server, user_id='user_123')
+print(personalized_feed)
+```

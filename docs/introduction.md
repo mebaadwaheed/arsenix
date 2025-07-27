@@ -1,21 +1,20 @@
 # Introduction to Arsenix
 
-Arsenix is a lightweight, minimalist, and fast Python library designed for high-performance caching, pattern detection, and algorithmic tasks. It is built to be simple, extendable, and efficient, making it suitable for a wide range of applications, from backend services and machine learning to embedded systems and games.
+Arsenix is a modern, asynchronous Python library designed for building high-performance, scalable recommendation engines. It provides a flexible and intuitive toolkit for developers to create sophisticated, data-driven features with minimal boilerplate.
 
-## Core Design Goals
+## Core Philosophy
 
-- **📦 Lightweight**: With a minimal footprint, Arsenix is designed to be lean. The target installation size is under 500 KB.
+The design of Arsenix is guided by three core principles:
 
-- **⚡ Fast**: Operations are optimized for low latency, using efficient data structures and an asynchronous design to handle concurrent tasks without blocking.
+1.  **Flexibility**: Arsenix is built to be adaptable. With the powerful `FYPBuilder`, you can create custom recommendation algorithms tailored to your specific needs, from simple content feeds to complex, multi-faceted scoring systems.
 
-- **🔌 Simple API**: The library exposes a clean and intuitive API, with core components like `ArsenixServer`, `ARGetter`, and `ARSetter` that are easy to understand and use.
+2.  **Ease of Use**: We believe that powerful tools should be easy to use. Arsenix provides a clean, declarative API and a set of pre-built strategies that allow you to get up and running in minutes.
 
-- **📈 Extendable**: Arsenix is built with extensibility in mind. Its modular components can be adapted or built upon to fit custom requirements.
+3.  **Performance**: Built on `asyncio`, Arsenix is designed for high-concurrency environments, ensuring that your recommendation engine can scale with your application.
 
 ## Key Features
 
-- **Algorithm System**: Build custom recommendation engines and scoring systems.
-- **Getter / Setter**: A simple and efficient interface for data manipulation.
-- **Caching System**: An in-memory cache to store computed results and frequently accessed data.
-- **Pattern Detection**: Learn and store user interest patterns to refine recommendations.
-- **Async by Default**: All core operations are asynchronous, making Arsenix ideal for modern, high-concurrency applications.
+- **Rule + Score Mixing Engine**: A declarative, chainable interface for building custom recommendation algorithms.
+- **Smart Pre-Built FYP Strategies**: A set of pre-built functions for common use cases like trending and personalized feeds.
+- **Pluggable Caching**: Support for multiple caching backends, including local, disk, and Redis.
+- **Asynchronous by Design**: Built from the ground up to be fully asynchronous, ensuring high performance and scalability.

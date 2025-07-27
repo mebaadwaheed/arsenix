@@ -1,8 +1,60 @@
 # Arsenix Documentation
 
-Welcome to the official documentation for Arsenix, a lightweight, minimalist, and fast caching and pattern design library.
+Welcome to the official documentation for Arsenix, a high-performance Python library for building scalable recommendation engines.
 
-This documentation provides a comprehensive guide to help you get the most out of Arsenix. Whether you're a new user or an experienced developer, you'll find everything you need to know right here.
+## Quick Start
+
+Get started in minutes with our pre-built FYP strategies.
+
+### Trending Feed
+
+```python
+from arsenix import ArsenixServer, TrendingFYP
+
+server = ArsenixServer()
+await server.load_from_file('data.json')
+
+trending_feed = await TrendingFYP(server)
+print(trending_feed)
+```
+
+### Personalized Feed
+
+```python
+from arsenix import ArsenixServer, PersonalizedFYP
+
+server = ArsenixServer()
+await server.load_from_file('data.json')
+
+personalized_feed = await PersonalizedFYP(server, user_id='user_123')
+print(personalized_feed)
+```
+
+## Custom Algorithms with FYPBuilder
+
+For more advanced use cases, the `FYPBuilder` provides a flexible, chainable interface for creating custom recommendation algorithms.
+
+```python
+from arsenix import FYPBuilder
+
+items = await server.get('items', {})
+
+builder = FYPBuilder(items)
+recommendations = await builder.match_tags(['tech', 'ai'], weight=2.0) \
+                               .boost_recency(1.5) \
+                               .limit(10) \
+                               .run()
+
+print(recommendations)
+```
+
+## Key Features
+
+- **Rule + Score Mixing Engine**: A declarative interface for building custom algorithms.
+- **Pre-Built Strategies**: Ready-to-use functions for common recommendation scenarios.
+- **Asynchronous by Design**: Built on `asyncio` for high performance and scalability.
+- **Pluggable Caching**: Support for local, disk, and Redis caching.
+
 
 ## Table of Contents
 

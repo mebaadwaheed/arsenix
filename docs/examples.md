@@ -1,49 +1,78 @@
 # Examples
 
-This section provides practical examples demonstrating how to use the core features of Arsenix in a real-world scenario.
+This document provides a set of practical examples that demonstrate how to use the `FYPBuilder` and the pre-built FYP strategies to create sophisticated recommendation feeds.
 
-## Comprehensive Example: Recommendation Engine
+## Example 1: Building a Custom Feed for a Social Media App
 
-This example showcases how to use Arsenix to build a simple recommendation engine that suggests content based on scores, caches the results, and learns user patterns.
+In this example, we'll build a custom feed for a social media app that prioritizes recent content, boosts posts with high engagement, and demotes posts with negative feedback.
 
 ```python
 import asyncio
-from arsenix import ArsenixServer
-from arsenix.algorithm import FYPBuilder
+from arsenix import ArsenixServer, FYPBuilder
 
 async def main():
-    # 1. Initialize ArsenixServer
+    # Initialize the server and load data
     server = ArsenixServer()
+    await server.load_from_file('social_media_data.json')
 
-    # 2. Add sample data using ARSetter
-    await server.set("video1", {"score": 90, "tags": ["funny", "cat"]})
-    await server.set("video2", {"score": 75, "tags": ["tech", "ai"]})
-    await server.set("video3", {"score": 95, "tags": ["funny", "dog"]})
+    # Get items from the server
+    items = await server.get('posts', {})
 
-    print(f"Initial data store: {server.data_store}")
+    # Build the custom feed
+    builder = FYPBuilder(items)
+    recommendations = await builder.boost_recency(1.5) \
+                                   .boost_by_key('likes', 0.2) \
+                                   .boost_by_key('shares', 0.3) \
+                                   .demote_by_key('reports', 0.5) \
+                                   .limit(20) \
+                                   .run()
 
-    # 3. Get recommendations using FYPBuilder
-    recommended = await FYPBuilder(list(server.data_store.values()))
-    print(f"\nRecommended content: {recommended}")
-
-    # 4. Cache the results using LocalCache
-    await server.cache.put("user123_recommendations", recommended)
-    cached_result = await server.cache.get("user123_recommendations")
-    print(f"\nCached recommendations: {cached_result}")
-
-    # 5. Learn user interests with the Pattern system
-    await server.pattern.learn("user123", ["funny", "tech", "ai"])
-    user_pattern = await server.pattern.get_pattern("user123")
-    print(f"\nLearned pattern for user123: {user_pattern}")
+    print("Custom Social Media Feed:", recommendations)
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### How It Works
+## Example 2: Using the TrendingFYP Strategy
 
-1.  **Initialization**: An `ArsenixServer` instance is created.
-2.  **Data Seeding**: Sample video data with scores and tags is added to the data store.
-3.  **Recommendation**: The `FYPBuilder` function sorts the videos by score to create a ranked list.
-4.  **Caching**: The recommendation results are stored in the `LocalCache` for fast retrieval.
-5.  **Pattern Learning**: The system learns that `user123` is interested in `funny`, `tech`, and `ai` tags.
+This example demonstrates how to use the `TrendingFYP` pre-built strategy to quickly generate a trending feed.
+
+```python
+import asyncio
+from arsenix import ArsenixServer, TrendingFYP
+
+async def main():
+    # Initialize the server and load data
+    server = ArsenixServer()
+    await server.load_from_file('trending_data.json')
+
+    # Generate the trending feed
+    trending_feed = await TrendingFYP(server)
+
+    print("Trending Feed:", trending_feed)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## Example 3: Using the PersonalizedFYP Strategy
+
+This example shows how to use the `PersonalizedFYP` pre-built strategy to generate a feed tailored to a specific user's interests.
+
+```python
+import asyncio
+from arsenix import ArsenixServer, PersonalizedFYP
+
+async def main():
+    # Initialize the server and load data
+    server = ArsenixServer()
+    await server.load_from_file('user_data.json')
+
+    # Generate a personalized feed for user 'user_456'
+    personalized_feed = await PersonalizedFYP(server, user_id='user_456')
+
+    print("Personalized Feed for user_456:", personalized_feed)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

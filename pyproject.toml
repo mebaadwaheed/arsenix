@@ -15,6 +15,10 @@ dependencies = [
     "aiofiles>=23.1.0"
 ]
 
+[project.optional-dependencies]
+diskcache = ["diskcache>=5.4.0"]
+redis = ["redis>=4.3.4"]
+
 [project.urls]
 "Homepage" = "https://github.com/mebaadwaheed/arsenix"
 "Bug Tracker" = "https://github.com/mebaadwaheed/arsenix/issues"

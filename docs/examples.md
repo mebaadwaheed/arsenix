@@ -8,7 +8,8 @@ In this example, we'll build a custom feed for a social media app that prioritiz
 
 ```python
 import asyncio
-from arsenix import ArsenixServer, FYPBuilder
+from arsenix import ArsenixServer
+from arsenix.algorithm import FYPBuilder
 
 async def main():
     # Initialize the server and load data
@@ -39,7 +40,8 @@ This example demonstrates how to use the `TrendingFYP` pre-built strategy to qui
 
 ```python
 import asyncio
-from arsenix import ArsenixServer, TrendingFYP
+from arsenix import ArsenixServer
+from arsenix.presets import TrendingFYP
 
 async def main():
     # Initialize the server and load data
@@ -61,7 +63,8 @@ This example shows how to use the `PersonalizedFYP` pre-built strategy to genera
 
 ```python
 import asyncio
-from arsenix import ArsenixServer, PersonalizedFYP
+from arsenix import ArsenixServer
+from arsenix.presets import PersonalizedFYP
 
 async def main():
     # Initialize the server and load data
